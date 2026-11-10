@@ -2,6 +2,7 @@
 #include"constants.h"
 #include"checkPpmFileName.h"
 #include"ColorImageClass.h"
+#include"getSingleString.h"
 #include<iostream>
 #include<string>
 
@@ -14,9 +15,9 @@ void printImage(ColorImageClass &inputImage, string &errorMessage)
       {
         string outFileName;
         cout << PROMPT_OUTPUT_FILENAME;
-        cin >> outFileName;
 
-        if(cin.fail() || !checkPpmFileName(outFileName, errorMessage))
+        if(!getSingleString(outFileName) || 
+           !checkPpmFileName(outFileName, errorMessage))
         {
           cout << ERROR_INVALID_PPM << endl;
         }

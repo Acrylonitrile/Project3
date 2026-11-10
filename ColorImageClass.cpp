@@ -42,7 +42,6 @@ bool ColorImageClass::readImageFromFile(ifstream &inFile, string &errorMessage)
         return false;
     }
 
-
     initializeImage(height, width);
     for(int rowIndex = 0; rowIndex < height; rowIndex++)
     {

@@ -1,9 +1,10 @@
 #include"insertImage.h"
 #include"constants.h"
 #include"checkPpmFileName.h"
-#include"getTwoIntInputs.h"
+#include"validateTwoInts.h"
 #include"chooseColorFromMenu.h"
 #include"ColorImageClass.h"
+#include"getSingleString.h"
 #include<iostream>
 #include<fstream>
 #include<string>
@@ -15,9 +16,10 @@ void insertImage(ColorImageClass &inputImage, string &errorMessage)
 {
     string annotateFileName;
     cout << PROMPT_INSERT_IMAGE_NAME;
-    cin >> annotateFileName;
+    getSingleString(annotateFileName);
     ifstream inFile;
 
+    
     bool isValidFileName = checkPpmFileName(annotateFileName, errorMessage);
     if(!isValidFileName)
     {
@@ -25,56 +27,49 @@ void insertImage(ColorImageClass &inputImage, string &errorMessage)
     }
     else
     {
-     // .ppm extensino has been verified
-    bool isInputValid = false;
-    
-    while(!isInputValid)
-    {
-        int startRow, startCol;
-
-        cout << PROMPT_INSERT_IMAGE_POSITION;
-
-        // starting row and column input
-        isInputValid = getTwoIntInputs(startRow, startCol);
-        if(!isInputValid)
+        // .ppm extensino has been verified
+        bool isInputValid = false;
+        
+        while(!isInputValid)
         {
-        cout << ERROR_DATA << endl;
-        }
-        else
-        {
+            int startRow, startCol;
+            // starting row and column input
+            validateTwoInts(startRow,startCol, 
+                            PROMPT_ENTER_PATTERN_POSITION,
+                            ERROR_DATA);
 
-        // Choosing transparency coor
-        ColorClass transparencyColor;
-        chooseColorFromMenu(transparencyColor, PROMPT_TRANSPARENCY_COLOR);
 
-        isInputValid = true;
-        inFile.open(annotateFileName);
-        // handling bad filename
-        if(inFile.fail())
-        {
-            cout << ERROR_OPEN_IMAGE_FILE << annotateFileName << endl;
-        }
-        else
-        {
+            // Choosing transparency coor
+            ColorClass transparencyColor;
+            chooseColorFromMenu(transparencyColor, PROMPT_TRANSPARENCY_COLOR);
 
-            ColorImageClass annotateImage;
-            // reads image and verifies that it has the proper values
-            bool isValidImage = annotateImage.readImageFromFile(
-                                              inFile,errorMessage
-                                              );
-            if(!isValidImage)
+            isInputValid = true;
+            inFile.open(annotateFileName.c_str());
+            // handling bad filename
+            if(inFile.fail())
             {
-            cout << errorMessage << endl;
+                cout << ERROR_OPEN_IMAGE_FILE << annotateFileName << endl;
             }
             else
             {
-            inputImage.insertImage(annotateImage, 
-                                   startRow, startCol,       
-                                   transparencyColor);
+
+                ColorImageClass annotateImage;
+                // reads image and verifies that it has the proper values
+                bool isValidImage = annotateImage.readImageFromFile(
+                                                inFile,errorMessage
+                                                );
+                if(!isValidImage)
+                {
+                cout << errorMessage << endl;
+                }
+                else
+                {
+                inputImage.insertImage(annotateImage, 
+                                    startRow, startCol,       
+                                    transparencyColor);
+                }
             }
         }
-        }
-    }
     }
 
       

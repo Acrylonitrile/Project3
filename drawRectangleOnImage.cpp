@@ -1,11 +1,11 @@
 #include"drawRectangleOnImage.h"
 #include"ColorImageClass.h"
 #include"printMenuOptions.h"
-#include"checkStreamState.h"
-#include"getTwoIntInputs.h"
 #include"getSingleIntInput.h"
 #include"chooseColorFromMenu.h"
 #include"constants.h"
+#include"validateSingleInt.h"
+#include"validateTwoInts.h"
 #include<iostream>
 
 using namespace std;
@@ -15,15 +15,16 @@ void drawRectangleOnImage(ColorImageClass &inputImage)
   int inputOption;
   // variable to keep track of whether all the inputs are satisfactory
   bool isValidOption = false;
+
   while(!isValidOption)
   {
     // Prints menu for user to choose how to provide inputs
     printMenuOptions(NUM_RECTANGLE_OPTIONS,RECTANGLE_MENU_OPTIONS);
     cout << PROMPT_RECTANGLE_OPTION;
-    cin >> inputOption;
-
+    bool isOptionValid = getSingleIntInput(inputOption);
+    
     // Error in case of out of bounds input of failed stream
-    if(!checkStreamState() || inputOption < 1 || 
+    if(!isOptionValid || inputOption < 1 || 
        inputOption > NUM_RECTANGLE_OPTIONS)
     {
       cout << ERROR_INVALID_MENU << endl;
@@ -46,68 +47,43 @@ void drawRectangleOnImage(ColorImageClass &inputImage)
     {
       int upLeftRow, upLeftCol, lowRightRow, lowRightCol;
 
-      cout << PROMPT_RECTANGLE_INPUT_1_1;
-      if(getTwoIntInputs(upLeftRow, upLeftCol))
-      {
-        cout << PROMPT_RECTANGLE_INPUT_1_2;
-        if(getTwoIntInputs(lowRightRow,lowRightCol))
-        {
-
-          // Checks in case the lower right point is not actually
-          // lower right to the first point
-          startRow = upLeftRow;
-          startCol = upLeftCol;
-          height = lowRightRow - upLeftRow;
-          width = lowRightCol - upLeftCol;
-          if(height > 0 || width > 0)
-          {
-            isValidInput = true;
-          }
-        }
-      }
+      validateTwoInts(upLeftRow,upLeftCol,
+                      PROMPT_RECTANGLE_INPUT_1_1, ERROR_DATA);
+      validateTwoInts(lowRightRow,lowRightCol,
+                       PROMPT_RECTANGLE_INPUT_1_2, ERROR_DATA);
+      startRow = upLeftRow;
+      startCol = upLeftCol;
+      height = lowRightRow - upLeftRow;
+      width = lowRightCol - upLeftCol;
     }
 
     // When one corner and width height are specified
     else if(inputOption == RECTANGLE_DIMENSIONS_OPTION)
     {
-      cout << PROMPT_RECTANGLE_INPUT_2_1;
-      if(getTwoIntInputs(startRow,startCol))
-      {
-        cout << PROMPT_RECTANGLE_INPUT_2_2;
-        // Checking for bad input or non positive height ot width 
-        // provided
-        if(getSingleIntInput(height) && height > 0)
-        {
-          cout << PROMPT_RECTANGLE_INPUT_2_3;
-          if(getSingleIntInput(width) && width > 0)
-          {
-            isValidInput = true;
-          }
-        }
-      }
+      validateTwoInts(startRow,startCol,
+                      PROMPT_RECTANGLE_INPUT_2_1, ERROR_DATA);
+      validateSingleInt(height, PROMPT_RECTANGLE_INPUT_2_2, ERROR_DATA);
+      validateSingleInt(width, PROMPT_RECTANGLE_INPUT_2_3, ERROR_DATA);
+      
     }
 
     // When user specified the center and half of width and height
     else if(inputOption == RECTANGLE_CENTRE_OPTION)
     {
       int rowCenter, colCenter, halfWidth, halfHeight;
-      cout << PROMPT_RECTANGLE_INPUT_3_1;
-      if(getTwoIntInputs(rowCenter, colCenter))
-      {
-        cout << PROMPT_RECTANGLE_INPUT_3_2;
-        if(getSingleIntInput(halfHeight) && halfHeight > 0)
-        {
-          cout << PROMPT_RECTANGLE_INPUT_3_3;
-          if(getSingleIntInput(halfWidth) && halfWidth > 0)
-          {
-            isValidInput = true;
-            height = 2 * halfHeight;
-            width = 2 * halfWidth;
-            startRow = rowCenter - halfHeight;
-            startCol = colCenter - halfWidth;
-          }
-        }
-      }
+      validateTwoInts(rowCenter,colCenter,
+                      PROMPT_RECTANGLE_INPUT_3_1, ERROR_DATA);
+      validateSingleInt(halfHeight, PROMPT_RECTANGLE_INPUT_3_2, ERROR_DATA);
+      validateSingleInt(halfWidth, PROMPT_RECTANGLE_INPUT_3_3, ERROR_DATA);
+   
+      height = 2 * halfHeight;
+      width = 2 * halfWidth;
+      startRow = rowCenter - halfHeight;
+      startCol = colCenter - halfWidth;
+    }
+    if(height > 0 && width > 0)
+    {
+      isValidInput = true;
     }
     if(!isValidInput)
     {
@@ -130,7 +106,7 @@ void drawRectangleOnImage(ColorImageClass &inputImage)
                        (fillValue == FILL_NO || fillValue == FILL_YES);
     if(!isValidFillValue)
     {
-      cout << ERROR_DATA;
+      cout << ERROR_DATA << endl;
     }
   }
   bool isFilled = (fillValue == FILL_YES);

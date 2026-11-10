@@ -5,12 +5,13 @@
 #include<fstream>
 #include<string>
 #include"checkPpmFileName.h"
-#include"checkStreamState.h"
 #include"printMenuOptions.h"
 #include"drawRectangleOnImage.h"
 #include"insertImage.h"
 #include"printImage.h"
 #include"insertPattern.h"
+#include"getSingleIntInput.h"
+#include"validateSingleInt.h"
 using namespace std;
 
 
@@ -89,8 +90,8 @@ int main(int argc, char *argv[])
     cout << PROMPT_MAIN_MENU; 
 
     // Check user choice range
-    cin >> userChoice;
-    if( !checkStreamState() || userChoice < 1 || userChoice > MAIN_MENU_LENGTH)
+    bool isChoiceValid = getSingleIntInput(userChoice);
+    if( !isChoiceValid || userChoice < 1 || userChoice > MAIN_MENU_LENGTH)
     {
       cout << ERROR_INVALID_MENU << endl;
       userChoice = 0;

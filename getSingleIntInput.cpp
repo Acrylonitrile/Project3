@@ -1,5 +1,5 @@
 #include"getSingleIntInput.h"
-#include"checkStreamState.h"
+#include"constants.h"
 #include<iostream>
 
 using namespace std;
@@ -7,6 +7,11 @@ using namespace std;
 
 bool getSingleIntInput(int &input)
 {
-    cin >> input;
-    return checkStreamState();
+    if(cin >> input)
+    {
+        return true;
+    }
+    cin.clear();
+    cin.ignore(NUM_IGNORE, '\n');
+    return false;
 }
