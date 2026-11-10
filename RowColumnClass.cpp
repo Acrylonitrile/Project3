@@ -2,6 +2,13 @@
 #include"constants.h"
 #include<iostream>
 
+// Programmer: Anhad Bhati
+// Date: November 10, 2026
+//
+// Purpose: 
+// RowColumnClass represents a particular coordinate on the image
+// It has functionalitys and also
+
 
 RowColumnClass::RowColumnClass():rowIndex(INITIAL_ROW_VALUE),
                                  colIndex(INITIAL_COL_VALUE)

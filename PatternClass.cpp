@@ -9,6 +9,13 @@
 
 using namespace std;
 
+// Programmer: Anhad Bhati
+// Date: November 10, 2026
+//
+// Purpose: 
+// Encodes information on a given pattern, using height, widths, values 1/0
+// and the color the user would like to draw the pattern in
+
 PatternClass::PatternClass(): height(0), width(0), patternValues(0)
 { ; }
 

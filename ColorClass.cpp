@@ -7,6 +7,13 @@
 
 using namespace std;
 
+// Programmer: Anhad Bhati
+// Date: November 10, 2026
+//
+// Purpose: 
+// Objects of this class represent a pixel, with RGB values and functionality to
+// be set to a desired colour and read pixel values from input file
+
 bool ColorClass::clipColorValues()
 {
     bool isRedClipped, isGreenClipped, isBlueClipped;
