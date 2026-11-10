@@ -1,7 +1,7 @@
-all: main.exe
+all: imageMods402.exe
 
-main.o: main.cpp ColorImageClass.h constants.h checkPpmFileName.h checkStreamState.h printMenuOptions.h drawRectangleOnImage.h insertImage.h printImage.h insertPattern.h
-	g++ -std=c++98 -Wall -c main.cpp -o main.o
+imageMods402.o: imageMods402.cpp ColorImageClass.h constants.h checkPpmFileName.h checkStreamState.h printMenuOptions.h drawRectangleOnImage.h insertImage.h printImage.h insertPattern.h
+	g++ -std=c++98 -Wall -c imageMods402.cpp -o imageMods402.o
 
 clipValue.o: clipValue.cpp
 	g++ -std=c++98 -Wall -c clipValue.cpp -o clipValue.o
@@ -54,8 +54,8 @@ insertPattern.o: insertPattern.cpp constants.h chooseColorFromMenu.h getTwoIntIn
 printImage.o: printImage.cpp constants.h checkPpmFileName.h ColorImageClass.h
 	g++ -std=c++98 -Wall -c printImage.cpp -o printImage.o
 
-main.exe: clipValue.o chooseColorFromMenu.o printMenuOptions.o getSingleIntInput.o getTwoIntInputs.o checkStreamState.o readPpmHeader.o checkPpmFileName.o checkRange.o ColorClass.o RowColumnClass.o PatternClass.o ColorImageClass.o drawRectangleOnImage.o insertImage.o insertPattern.o printImage.o main.o
-	g++ -std=c++98 clipValue.o chooseColorFromMenu.o printMenuOptions.o getSingleIntInput.o getTwoIntInputs.o checkStreamState.o readPpmHeader.o checkPpmFileName.o checkRange.o ColorClass.o RowColumnClass.o PatternClass.o ColorImageClass.o drawRectangleOnImage.o insertImage.o insertPattern.o printImage.o main.o -o main.exe
+imageMods402.exe: clipValue.o chooseColorFromMenu.o printMenuOptions.o getSingleIntInput.o getTwoIntInputs.o checkStreamState.o readPpmHeader.o checkPpmFileName.o checkRange.o ColorClass.o RowColumnClass.o PatternClass.o ColorImageClass.o drawRectangleOnImage.o insertImage.o insertPattern.o printImage.o imageMods402.o
+	g++ -std=c++98 clipValue.o chooseColorFromMenu.o printMenuOptions.o getSingleIntInput.o getTwoIntInputs.o checkStreamState.o readPpmHeader.o checkPpmFileName.o checkRange.o ColorClass.o RowColumnClass.o PatternClass.o ColorImageClass.o drawRectangleOnImage.o insertImage.o insertPattern.o printImage.o imageMods402.o -o imageMods402.exe
 
 clean:
 	rm -f *.o *.exe
