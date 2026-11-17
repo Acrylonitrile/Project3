@@ -61,8 +61,8 @@ void drawRectangleOnImage(ColorImageClass &inputImage)
                        PROMPT_RECTANGLE_INPUT_1_2, ERROR_DATA);
       startRow = upLeftRow;
       startCol = upLeftCol;
-      height = lowRightRow - upLeftRow;
-      width = lowRightCol - upLeftCol;
+      height = lowRightRow - upLeftRow + 1;
+      width = lowRightCol - upLeftCol + 1;
     }
 
     // When one corner and width height are specified
@@ -72,7 +72,6 @@ void drawRectangleOnImage(ColorImageClass &inputImage)
                       PROMPT_RECTANGLE_INPUT_2_1, ERROR_DATA);
       validateSingleInt(height, PROMPT_RECTANGLE_INPUT_2_2, ERROR_DATA);
       validateSingleInt(width, PROMPT_RECTANGLE_INPUT_2_3, ERROR_DATA);
-      
     }
 
     // When user specified the center and half of width and height
@@ -84,8 +83,8 @@ void drawRectangleOnImage(ColorImageClass &inputImage)
       validateSingleInt(halfHeight, PROMPT_RECTANGLE_INPUT_3_2, ERROR_DATA);
       validateSingleInt(halfWidth, PROMPT_RECTANGLE_INPUT_3_3, ERROR_DATA);
    
-      height = 2 * halfHeight;
-      width = 2 * halfWidth;
+      height = 2 * halfHeight + 1;
+      width = 2 * halfWidth + 1;
       startRow = rowCenter - halfHeight;
       startCol = colCenter - halfWidth;
     }

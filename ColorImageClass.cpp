@@ -11,6 +11,13 @@
 
 using namespace std;
 
+// Programmer: Anhad Bhati
+// Date: November 10, 2026
+//
+// Purpose: 
+// This class represents an image, with each pixel represented by colorclass 
+// object
+
 ColorImageClass::ColorImageClass(): height(0), width(0), pixelColors(0)
 { ; }
 
@@ -26,11 +33,15 @@ void ColorImageClass::initializeImage(const int height, const int width)
 
 ColorImageClass::~ColorImageClass()
 {
-    for(int rowIndex = 0; rowIndex < height; rowIndex++)
+    if(pixelColors != 0)
     {
-        delete [] pixelColors[rowIndex];
+        for(int rowIndex = 0; rowIndex < height; rowIndex++)
+        {
+            delete [] pixelColors[rowIndex];
+        }
+        delete [] pixelColors;
     }
-    delete [] pixelColors;
+    pixelColors = 0;
 }
 
 bool ColorImageClass::readImageFromFile(ifstream &inFile, string &errorMessage)

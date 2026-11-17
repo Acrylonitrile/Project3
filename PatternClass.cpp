@@ -33,11 +33,15 @@ void PatternClass::initializePattern(const int inHeight, const int inWidth)
 
 PatternClass::~PatternClass()
 {
-    for(int rowIndex = 0; rowIndex < height; rowIndex++)
+    if(patternValues != 0)
     {
-        delete [] patternValues[rowIndex];
+        for(int rowIndex = 0; rowIndex < height; rowIndex++)
+        {
+            delete [] patternValues[rowIndex];
+        }
+        delete [] patternValues;
     }
-    delete [] patternValues;
+    patternValues = 0;
 }
 
 bool PatternClass::readPatternFromFile(string &inputFileName, 
@@ -95,6 +99,7 @@ bool PatternClass::readPatternFromFile(string &inputFileName,
     if(inFile >> extraValue)
     {
         inFile.close();
+        errorMessage = ERROR_EXTRA_VALUES;
         return false;
     }
     inFile.close();

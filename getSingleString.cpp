@@ -18,6 +18,11 @@ bool getSingleString(string &inputString)
     {
         return true;
     }
+    if(cin.eof())
+    {
+        cout << "End of file reached" << endl;
+        exit(0);
+    }
     cin.clear();
     cin.ignore(NUM_IGNORE, '\n');
     return false;

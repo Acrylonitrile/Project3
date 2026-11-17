@@ -7,8 +7,7 @@
 
 using namespace std;
 
-// Encodes information on a given pattern, using height, widths, values 1/0
-// and the color the user would like to draw the pattern in
+
 class PatternClass{
     private:
         int height, width;

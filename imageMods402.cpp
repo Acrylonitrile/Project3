@@ -11,7 +11,6 @@
 #include"printImage.h"
 #include"insertPattern.h"
 #include"getSingleIntInput.h"
-#include"validateSingleInt.h"
 using namespace std;
 
 
@@ -47,7 +46,7 @@ int main(int argc, char *argv[])
     cout << ERROR_NO_INPUT_IMAGE << endl;
     exit(2);
   }
-
+ 
   string inputFileName = argv[1];
 
   // Checking for a valid .ppm extension in filename

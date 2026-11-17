@@ -81,7 +81,5 @@ void insertImage(ColorImageClass &inputImage, string &errorMessage)
                 }
             }
         }
-    }
-
-      
+    }  
 }

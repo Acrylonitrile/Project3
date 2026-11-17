@@ -15,7 +15,7 @@ void validateTwoInts(int &input1, int &input2, const string &inputPrompt,
                      const string &errorMessage)
 {
     bool isValid = false;
-    while(!isValid)
+    while(!isValid && !cin.eof())
     {
         cout << inputPrompt;
         isValid = getTwoIntInputs(input1, input2);

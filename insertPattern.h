@@ -6,7 +6,6 @@
 
 using namespace std;
 
-
 void insertPattern(ColorImageClass &inputImage, string &errorMessage);
 
 
