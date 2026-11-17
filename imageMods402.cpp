@@ -95,12 +95,6 @@ int main(int argc, char *argv[])
       cout << ERROR_INVALID_MENU << endl;
       userChoice = 0;
     }
-    else if(userChoice == EXIT_OPTION)
-    {
-      cout << PROGRAM_END_MESSAGE << endl;
-      return 0;
-    }
-
     else if(userChoice == WRITE_IMAGE_OPTION)
     {
       printImage(inputImage, errorMessage);
@@ -117,11 +111,12 @@ int main(int argc, char *argv[])
     {
       insertImage(inputImage, errorMessage);
     }
-    else
+    else if(userChoice != EXIT_OPTION)
     {
       cout << ERROR_INVALID_MENU << endl;
     }
   }
+  cout << PROGRAM_END_MESSAGE << endl;
   return 0;
 }
 
