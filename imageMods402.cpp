@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
     else if(userChoice == EXIT_OPTION)
     {
       cout << PROGRAM_END_MESSAGE << endl;
-      exit(0);
+      return 0;
     }
 
     else if(userChoice == WRITE_IMAGE_OPTION)
@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
       cout << ERROR_INVALID_MENU << endl;
     }
   }
-  exit(0);
+  return 0;
 }
 
 //------------------------------------------------------------------------------
