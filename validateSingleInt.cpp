@@ -17,7 +17,7 @@ void validateSingleInt(int &input, const string &inputPrompt, const
                        string &errorMessage)
 {
     bool isValid = false;
-    while(!isValid || !cin.eof())
+    while(!isValid && !cin.eof())
     {
         cout << inputPrompt;
         isValid = getSingleIntInput(input);
