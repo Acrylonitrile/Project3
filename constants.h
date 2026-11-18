@@ -137,7 +137,7 @@ const string PROMPT_INSERT_IMAGE_NAME =
 const string PROMPT_INSERT_IMAGE_POSITION = 
                         "Enter upper left corner to insert image row and column: ";
 const string PROMPT_TRANSPARENCY_COLOR = 
-                        "Enter int for transparecy color: ";
+                        "Enter int for transparency color: ";
 
 const string PROMPT_ENTER_PATTERN_FILE = 
                         "Enter string for file name containing pattern: ";
