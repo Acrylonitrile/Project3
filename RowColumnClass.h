@@ -6,7 +6,6 @@
 //
 // Purpose:
 // RowColumnClass represents a particular coordinate on the image
-// It has functionalitys and also
 
 class RowColumnClass
 {

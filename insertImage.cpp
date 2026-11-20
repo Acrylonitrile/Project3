@@ -38,8 +38,6 @@ void insertImage(ColorImageClass &inputImage, string &errorMessage)
   else
   {
     // .ppm extensino has been verified
-
-
     int startRow, startCol;
     // starting row and column input
     validateTwoInts(startRow, startCol,

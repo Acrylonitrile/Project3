@@ -51,7 +51,8 @@ public:
   bool setColorAtLocation(const RowColumnClass &inRowCol,
                           const ColorClass &inColor);
 
-  // Gets the Color value at the specified position
+  // Gets the Color value at the specified position, if the location is invalid,
+  // returns false
   bool getColorAtLocation(const RowColumnClass &inRowCol,
                           ColorClass &outColor) const;
 

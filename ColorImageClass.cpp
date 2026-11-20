@@ -19,9 +19,7 @@ using namespace std;
 // object
 
 ColorImageClass::ColorImageClass() : height(0), width(0), pixelColors(0)
-{
-  ;
-}
+{ ; }
 
 void ColorImageClass::initializeImage(const int height, const int width)
 {
@@ -170,6 +168,9 @@ void ColorImageClass::insertImage(const ColorImageClass &inputImage,
   {
     for (int colIndex = 0; colIndex < width; colIndex++)
     {
+      // Since starting locations can be negative, we take the difference of 
+      // coordinates with starting row and column and check if it is a valid 
+      // location
       ColorClass inputColor;
       RowColumnClass locationIndex(rowIndex - startRow,
                                    colIndex - startCol);
@@ -177,7 +178,8 @@ void ColorImageClass::insertImage(const ColorImageClass &inputImage,
                                         locationIndex,
                                         inputColor
                                         );
-
+      // pixel overwritten with input image only if it is a valid location
+      // and does not have the transparency color
       if (isLocationValid && !inputColor.compareColor(transparencyColor))
       {
         pixelColors[rowIndex][colIndex].setTo(inputColor);
@@ -194,6 +196,9 @@ void ColorImageClass::insertPattern(const PatternClass &inputPattern,
   {
     for (int colIndex = 0; colIndex < width; colIndex++)
     {
+      // Since starting locations can be negative, we take the difference of 
+      // coordinates with starting row and column and check if it is a valid 
+      // location
       RowColumnClass locationIndex(rowIndex - startRow,
                                    colIndex - startCol);
       int patternValue;
@@ -201,8 +206,8 @@ void ColorImageClass::insertPattern(const PatternClass &inputPattern,
                                           locationIndex,
                                           patternValue
                                           );
-
-      if (isLocationValid && patternValue == 1)
+      // pixel overwritten only on valid location and having a value of 1
+      if (isLocationValid && patternValue == MAX_PATTERN_VALUE)
       {
         pixelColors[rowIndex][colIndex] = patternColor;
       }

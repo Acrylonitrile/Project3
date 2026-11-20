@@ -21,7 +21,7 @@ private:
   int **patternValues;
   ColorClass patternColor;
   // Take height and width and Dynamically allocates memory to hold
-  // hold pattern values
+  // pattern values
   void initializePattern(const int height, const int width);
 
 public:
@@ -39,7 +39,7 @@ public:
   bool readPatternFromFile(string &inputFileName, string &errorMessage);
 
   // Gets the pattern value (1/0) at that particular location, by first
-  // verifying if the location is a valid location
+  // verifying if the location is a valid location, and returns true if so
   bool getValueAtLocation(const RowColumnClass &inRowCol, int &outValue) const;
 
   // Gets the patternColor attribute

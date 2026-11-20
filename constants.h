@@ -53,49 +53,55 @@ const string PROGRAM_END_MESSAGE = "Thank you for using this program";
 
 const int MAIN_MENU_LENGTH = 5;
 
-
-const string MAIN_MENU_OPTIONS[MAIN_MENU_LENGTH] = 
-                              {
-                                "1. Annotate image with rectangle",
-                                "2. Annotate image with pattern from file",
-                                "3. Insert another image",
-                                "4. Write out current image",
-                                "5. Exit the program"
-                              };
-
 const int RECTANGLE_OPTION = 1;
 const int INSERT_PATTERN_OPTION = 2;
 const int INSERT_IMAGE_OPTION = 3;
 const int WRITE_IMAGE_OPTION = 4;
 const int EXIT_OPTION = 5;
 
+const string MAIN_MENU_OPTIONS[MAIN_MENU_LENGTH] = 
+                              {
+                                to_string(RECTANGLE_OPTION) + 
+                                ". Annotate image with rectangle",
+                                to_string(INSERT_PATTERN_OPTION) +
+                                ". Annotate image with pattern from file",
+                                to_string(INSERT_IMAGE_OPTION) +
+                                ". Insert another image",
+                                to_string(WRITE_IMAGE_OPTION) +
+                                ". Write out current image",
+                                to_string(EXIT_OPTION) +
+                                ". Exit the program"
+                              };
+
+
+
 const string PROMPT_MAIN_MENU = "Enter int for main menu choice: ";
 
  
 const int NUM_RECTANGLE_OPTIONS = 3;
-const string RECTANGLE_MENU_OPTIONS[NUM_RECTANGLE_OPTIONS] =
-                              {
-                                "1. Specify upper left and lower right corners of rectangle",
-                                "2. Specify upper left corner and dimensions of rectangle" ,
-                                "3. Specify extent from center of rectangle"
-                              };
 
 const int RECTANGLE_CORNER_OPTION = 1;
 const int RECTANGLE_DIMENSIONS_OPTION = 2;
 const int RECTANGLE_CENTRE_OPTION = 3;
 
+const string RECTANGLE_MENU_OPTIONS[NUM_RECTANGLE_OPTIONS] =
+                  {
+                    to_string(RECTANGLE_CORNER_OPTION) +
+                    ". Specify upper left and lower right corners of rectangle",
+                    to_string(RECTANGLE_DIMENSIONS_OPTION) +
+                    ". Specify upper left corner and dimensions of rectangle" ,
+                    to_string(RECTANGLE_CENTRE_OPTION) +
+                    ". Specify extent from center of rectangle"
+                  };
+
 const string PROMPT_RECTANGLE_OPTION = 
              "Enter int for rectangle specification method: ";
 
-const string RECTANGLE_OPTION_1 = 
-                        "1. Specify upper left and lower right corners of rectangle";
 const string PROMPT_RECTANGLE_INPUT_1_1 = 
                         "Enter upper left corner row and column: ";
 const string PROMPT_RECTANGLE_INPUT_1_2 = 
                         "Enter lower right corner row and column: ";
 
-const string RECTANGLE_OPTION_2 = 
-                        "2. Specify upper left corner and dimensions of rectangle";
 const string PROMPT_RECTANGLE_INPUT_2_1 = 
                         "Enter upper left corner row and column: ";
 const string PROMPT_RECTANGLE_INPUT_2_2 = 
@@ -114,33 +120,39 @@ const string PROMPT_RECTANGLE_COLOR =
                         "Enter int for rectangle color: ";
 
 const int NUM_FILL_OPTIONS = 2;
-const string RECTANGLE_FILL_OPTIONS[NUM_FILL_OPTIONS] = 
-                        {
-                            "1. No",
-                            "2. Yes"
-                        };
 
 const int FILL_YES = 2;
 const int FILL_NO = 1;
+
+const string RECTANGLE_FILL_OPTIONS[NUM_FILL_OPTIONS] = 
+                        {
+                          to_string(FILL_NO) + ". No",
+                          to_string(FILL_YES) + ". Yes"
+                        };
+
+
 
 const string PROMPT_RECTANGLE_FILL = 
                         "Enter int for rectangle fill option: ";
 
 const int COLOR_MENU_LENGTH = 5;
-const string COLOR_MENU_OPTIONS[COLOR_MENU_LENGTH] = 
-                               {
-                                 "1. Red",
-                                 "2. Green",
-                                 "3. Blue",
-                                 "4. Black",
-                                 "5. White"
-                               };
 
 const int NUM_RED_OPTION = 1;
 const int NUM_GREEN_OPTION = 2;
 const int NUM_BLUE_OPTION = 3;
 const int NUM_BLACK_OPTION = 4;
 const int NUM_WHITE_OPTION = 5;
+
+const string COLOR_MENU_OPTIONS[COLOR_MENU_LENGTH] = 
+                               {
+                                  to_string(NUM_RED_OPTION) + ". Red",
+                                  to_string(NUM_GREEN_OPTION) + ". Green",
+                                  to_string(NUM_BLUE_OPTION) + ". Blue",
+                                  to_string(NUM_BLACK_OPTION) + ". Black",
+                                  to_string(NUM_WHITE_OPTION) + ". White"
+                               };
+
+
 
 const string PROMPT_INSERT_IMAGE_NAME = 
                         "Enter string for file name of PPM image to insert: ";
@@ -166,7 +178,6 @@ const int NUM_IGNORE = 200;
 
 const int MAX_NUM_PIXELS = 2000;
 const int MIN_NUM_PIXELS = 1;
-
 
 
 const int MIN_PATTERN_VALUE = 0;
