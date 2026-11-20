@@ -32,7 +32,8 @@ void drawRectangleOnImage(ColorImageClass &inputImage)
     bool isOptionValid = getSingleIntInput(inputOption);
     
     // Error in case of out of bounds input of failed stream
-    if(!isOptionValid || inputOption < 1 || 
+    if(!isOptionValid || 
+       inputOption < MIN_MENU_CHOICE || 
        inputOption > NUM_RECTANGLE_OPTIONS)
     {
       cout << ERROR_INVALID_MENU << endl;
@@ -54,9 +55,11 @@ void drawRectangleOnImage(ColorImageClass &inputImage)
     int upLeftRow, upLeftCol, lowRightRow, lowRightCol;
 
     validateTwoInts(upLeftRow,upLeftCol,
-                    PROMPT_RECTANGLE_INPUT_1_1, ERROR_DATA);
+                    PROMPT_RECTANGLE_INPUT_1_1, 
+                    ERROR_DATA);
     validateTwoInts(lowRightRow,lowRightCol,
-                      PROMPT_RECTANGLE_INPUT_1_2, ERROR_DATA);
+                    PROMPT_RECTANGLE_INPUT_1_2, 
+                    ERROR_DATA);
     startRow = upLeftRow;
     startCol = upLeftCol;
     height = lowRightRow - upLeftRow + 1;
@@ -67,7 +70,8 @@ void drawRectangleOnImage(ColorImageClass &inputImage)
   else if(inputOption == RECTANGLE_DIMENSIONS_OPTION)
   {
     validateTwoInts(startRow,startCol,
-                    PROMPT_RECTANGLE_INPUT_2_1, ERROR_DATA);
+                    PROMPT_RECTANGLE_INPUT_2_1, 
+                    ERROR_DATA);
     validateSingleInt(height, PROMPT_RECTANGLE_INPUT_2_2, ERROR_DATA);
     validateSingleInt(width, PROMPT_RECTANGLE_INPUT_2_3, ERROR_DATA);
   }
@@ -77,7 +81,8 @@ void drawRectangleOnImage(ColorImageClass &inputImage)
   {
     int rowCenter, colCenter, halfWidth, halfHeight;
     validateTwoInts(rowCenter,colCenter,
-                    PROMPT_RECTANGLE_INPUT_3_1, ERROR_DATA);
+                    PROMPT_RECTANGLE_INPUT_3_1, 
+                    ERROR_DATA);
     validateSingleInt(halfHeight, PROMPT_RECTANGLE_INPUT_3_2, ERROR_DATA);
     validateSingleInt(halfWidth, PROMPT_RECTANGLE_INPUT_3_3, ERROR_DATA);
   

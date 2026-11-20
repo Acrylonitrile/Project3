@@ -7,6 +7,10 @@
 
 using namespace std;
 
+// Programmer: Anhad Bhati
+// Date: November 10, 2026
+//
+// Purpose:
 // Prints a menu of colors to choose from, since the menu is required in
 // all th functionalities, except with different promptMessage at the end.
 // The chosen color is then stored in the object inColor
@@ -23,7 +27,8 @@ void chooseColorFromMenu(ColorClass &inputColor, string promptMessage)
 
     // checking for bad input or input out of desired range
     if(!getSingleIntInput(colorChoice) || 
-        colorChoice < 1 || colorChoice > COLOR_MENU_LENGTH)
+        colorChoice < MIN_MENU_CHOICE || 
+        colorChoice > COLOR_MENU_LENGTH)
     {
       cout << ERROR_INVALID_MENU << endl;
     }

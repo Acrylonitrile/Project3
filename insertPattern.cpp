@@ -29,7 +29,8 @@ void insertPattern(ColorImageClass &inputImage, string &errorMessage)
       while(!isInputValid)
       {
         int startRow, startCol;
-        validateTwoInts(startRow,startCol, PROMPT_ENTER_PATTERN_POSITION,
+        validateTwoInts(startRow,startCol, 
+                        PROMPT_ENTER_PATTERN_POSITION,
                         ERROR_DATA);
         // validating position input
 
@@ -40,9 +41,10 @@ void insertPattern(ColorImageClass &inputImage, string &errorMessage)
         // Reading pattern from file and validation
         isInputValid = true;
         PatternClass annotatePattern;
-        bool isValidPattern = annotatePattern.readPatternFromFile
-                                              (patternFileName,
-                                                errorMessage);
+        bool isValidPattern = annotatePattern.readPatternFromFile(
+                                                patternFileName,
+                                                errorMessage
+                                                );
         if(!isValidPattern)
         {
           cout << errorMessage << endl;

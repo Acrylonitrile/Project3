@@ -4,6 +4,14 @@
 #include<string>
 using namespace std;
 
+const int MIN_ARGC = 2;
+const int FILENAME_INDEX = 1;
+
+const int EXIT_CODE_FILE_ERROR = 3;
+const int EXIT_CODE_INPUT_ERROR = 2;
+
+const int MIN_MENU_CHOICE = 1;
+
 const int DEFAULT_USER_CHOICE = 0;
 const int MIN_DIMENSION_VALUE = 1;
 const int MAX_DIMENSION_VALUE = 2000;
@@ -11,7 +19,8 @@ const string PPM_IDENTIFIER_STRING = "P3";
 
 const string ERROR_NO_INPUT_IMAGE = 
             "Error: No Input Image provided";
-
+const string ERROR_EOF = 
+            "Error: End of file reached";
 const string ERROR_DATA = 
             "Invalid data entered";
 const string ERROR_OPEN_PATTERN_FILE = 

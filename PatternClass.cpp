@@ -1,170 +1,167 @@
-#include"PatternClass.h"
-#include"ColorClass.h"
-#include"RowColumnClass.h"
-#include"checkRange.h"
-#include"constants.h"
-#include<fstream>
-#include<string>
-#include<iostream>
+#include "PatternClass.h"
+#include "ColorClass.h"
+#include "RowColumnClass.h"
+#include "checkRange.h"
+#include "constants.h"
+#include <fstream>
+#include <string>
+#include <iostream>
 
 using namespace std;
 
 // Programmer: Anhad Bhati
 // Date: November 10, 2026
 //
-// Purpose: 
+// Purpose:
 // Encodes information on a given pattern, using height, widths, values 1/0
 // and the color the user would like to draw the pattern in
 
-PatternClass::PatternClass(): height(0), width(0), patternValues(0)
+PatternClass::PatternClass() : height(0), width(0), patternValues(0)
 { ; }
 
 void PatternClass::initializePattern(const int inHeight, const int inWidth)
 {
-    height = inHeight;
-    width = inWidth;
-    patternValues = new int*[height];
-    for(int rowIndex = 0; rowIndex < height; rowIndex++)
-    {
-        patternValues[rowIndex] = new int[width];
-    }
-
+  height = inHeight;
+  width = inWidth;
+  patternValues = new int *[height];
+  for (int rowIndex = 0; rowIndex < height; rowIndex++)
+  {
+    patternValues[rowIndex] = new int[width];
+  }
 }
 
 PatternClass::~PatternClass()
 {
-    if(patternValues != 0)
+  if (patternValues != 0)
+  {
+    for (int rowIndex = 0; rowIndex < height; rowIndex++)
     {
-        for(int rowIndex = 0; rowIndex < height; rowIndex++)
-        {
-            delete [] patternValues[rowIndex];
-        }
-        delete [] patternValues;
+      delete[] patternValues[rowIndex];
     }
-    patternValues = 0;
+    delete[] patternValues;
+  }
+  patternValues = 0;
 }
 
-bool PatternClass::readPatternFromFile(string &inputFileName, 
+bool PatternClass::readPatternFromFile(string &inputFileName,
                                        string &errorMessage)
 {
-    ifstream inFile;
-    inFile.open(inputFileName.c_str());
-    if(inFile.fail())
+  ifstream inFile;
+  inFile.open(inputFileName.c_str());
+  if (inFile.fail())
+  {
+    errorMessage = ERROR_OPEN_PATTERN_FILE + inputFileName;
+    inFile.close();
+    return false;
+  }
+  else
+  {
+    inFile >> width >> height;
+
+    // Validating width and height
+    if (inFile.fail())
     {
-        errorMessage = ERROR_OPEN_PATTERN_FILE + inputFileName;
-        inFile.close();
-        return false;
+      errorMessage = ERROR_INCORRECT_DIMENSIONS;
+      inFile.close();
+      return false;
+    }
+    if (!checkRange(width, MIN_DIMENSION_VALUE, MAX_DIMENSION_VALUE) ||
+        !checkRange(height, MIN_DIMENSION_VALUE, MAX_DIMENSION_VALUE))
+    {
+      errorMessage = ERROR_DIMENSIONS;
+      inFile.close();
+      return false;
     }
     else
     {
-        inFile >> width >> height;
-
-        //Validating width and height
-        if(inFile.fail())
+      initializePattern(height, width);
+      for (int rowIndex = 0; rowIndex < height; rowIndex++)
+      {
+        for (int colIndex = 0; colIndex < width; colIndex++)
         {
-            errorMessage = ERROR_INCORRECT_DIMENSIONS;
+          // Checking if the values are 0/1
+          if (!(inFile >> patternValues[rowIndex][colIndex]) ||
+              !checkRange(patternValues[rowIndex][colIndex],
+                          MIN_PATTERN_VALUE,
+                          MAX_PATTERN_VALUE))
+          {
+            errorMessage = ERROR_DATA;
             inFile.close();
             return false;
+          }
         }
-        if(!checkRange(width,MIN_DIMENSION_VALUE,MAX_DIMENSION_VALUE) || 
-           !checkRange(height,MIN_DIMENSION_VALUE,MAX_DIMENSION_VALUE))
-        {
-            errorMessage = ERROR_DIMENSIONS;
-            inFile.close();
-            return false;
-        }
-        else
-        {
-            initializePattern(height, width);
-            for(int rowIndex = 0; rowIndex < height; rowIndex++)
-            {
-                for(int colIndex = 0; colIndex < width; colIndex++)
-                {
-                    // Checking if the values are 0/1 
-                    if(!(inFile >> patternValues[rowIndex][colIndex]) ||
-                       !checkRange(patternValues[rowIndex][colIndex],           
-                                   MIN_PATTERN_VALUE, 
-                                   MAX_PATTERN_VALUE))
-                    {
-                        errorMessage = ERROR_DATA;
-                        inFile.close();
-                        return false;
-                    }
-                }
-            }
-        }
+      }
     }
-    // Checking if there are more values than necessary
-    string extraValue;
-    if(inFile >> extraValue)
-    {
-        inFile.close();
-        errorMessage = ERROR_EXTRA_VALUES;
-        return false;
-    }
+  }
+  // Checking if there are more values than necessary
+  string extraValue;
+  if (inFile >> extraValue)
+  {
     inFile.close();
-    return true;
+    errorMessage = ERROR_EXTRA_VALUES;
+    return false;
+  }
+  inFile.close();
+  return true;
 }
 
-bool PatternClass::getValueAtLocation(const RowColumnClass &inRowCOl, 
+bool PatternClass::getValueAtLocation(const RowColumnClass &inRowCOl,
                                       int &outValue) const
 {
-    int rowIndex = inRowCOl.getRow();
-    int colIndex = inRowCOl.getCol();
+  int rowIndex = inRowCOl.getRow();
+  int colIndex = inRowCOl.getCol();
 
+  bool isInRange = checkRange(rowIndex, IMG_MIN_ROW_INDEX,
+                              IMG_MIN_ROW_INDEX + height - 1) &&
+                   checkRange(colIndex, IMG_MIN_COL_INDEX,
+                              IMG_MIN_COL_INDEX + width - 1);
 
-    bool isInRange = checkRange(rowIndex, IMG_MIN_ROW_INDEX, 
-                                IMG_MIN_ROW_INDEX + height - 1) &&
-                     checkRange(colIndex, IMG_MIN_COL_INDEX, 
-                                IMG_MIN_COL_INDEX + width - 1);
-
-    if(isInRange)
-       {
-            outValue = patternValues[rowIndex][colIndex];
-            return true;
-       }
-       else
-       {
-        return false;
-       }
+  if (isInRange)
+  {
+    outValue = patternValues[rowIndex][colIndex];
+    return true;
+  }
+  else
+  {
+    return false;
+  }
 }
 
 ColorClass PatternClass::getPatternColor() const
 {
-    return patternColor;
+  return patternColor;
 }
 
-void PatternClass::setPatternValue(const int inValue, 
-                                  const int rowIndex,
-                                  const int colIndex)
+void PatternClass::setPatternValue(const int inValue,
+                                   const int rowIndex,
+                                   const int colIndex)
 {
-    patternValues[rowIndex][colIndex] = inValue;
+  patternValues[rowIndex][colIndex] = inValue;
 }
 
 void PatternClass::setPatternColor(ColorClass &inColor)
 {
-    patternColor = inColor;
+  patternColor = inColor;
 }
-
 
 void PatternClass::setToRectangle(const bool isFilled)
 {
-    for(int rowIndex = 0; rowIndex < height; rowIndex++)
+  for (int rowIndex = 0; rowIndex < height; rowIndex++)
+  {
+    for (int colIndex = 0; colIndex < width; colIndex++)
     {
-        for(int colIndex = 0; colIndex < width; colIndex++)
-        {
-            // if filled, then the entire pattern is just 1's,
-            // Otherwise only the border, forming a rectangle.
-            if(isFilled || 
-               rowIndex == 0 || rowIndex == height - 1 ||
-               colIndex == 0 || colIndex == width - 1)
-            {
-                patternValues[rowIndex][colIndex] = 1;
-            }
-            else
-            {
-                patternValues[rowIndex][colIndex] = 0;
-            }
-        }
+      // if filled, then the entire pattern is just 1's,
+      // Otherwise only the border, forming a rectangle.
+      if (isFilled ||
+          rowIndex == 0 || rowIndex == height - 1 ||
+          colIndex == 0 || colIndex == width - 1)
+      {
+        patternValues[rowIndex][colIndex] = 1;
+      }
+      else
+      {
+        patternValues[rowIndex][colIndex] = 0;
+      }
     }
+  }
 }

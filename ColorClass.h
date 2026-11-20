@@ -1,56 +1,65 @@
 #ifndef COLORCLASS_H
 #define COLORCLASS_H
 
-#include<fstream>
-#include<string>
+#include <fstream>
+#include <string>
 
-using namespace std; 
+using namespace std;
+
+// Programmer: Anhad Bhati
+// Date: November 10, 2026
+//
+// Purpose:
+// Objects of this class represent a pixel, with RGB values and functionality to
+// be set to a desired colour and read pixel values from input file
+
 
 class ColorClass
 {
-    private:
-        int redValue;
-        int greenValue;
-        int blueValue;
+private:
+  int redValue;
+  int greenValue;
+  int blueValue;
 
-        // Clips the RGB color values of a ColorClass object between
-        // MIN_COLOR_VALUE and MAX_COLOR_VALUE
-        bool clipColorValues();
-    public:
-        // Initializes the object to white colour
-        ColorClass();
-        
-        // Initializes the object with the color values provided in the input
-        ColorClass(const int inRed, const int inGreen, const int inBlue);
-        
-        // Reads RGB values from a file and assigns it to itself, will return 
-        // false in case of bad input or color out of range
-        bool readColorFromFile(ifstream &inFile, string &errorMessage);
+  // Clips the RGB color values of a ColorClass object between
+  // MIN_COLOR_VALUE and MAX_COLOR_VALUE
+  bool clipColorValues();
 
-        // Following functions set the color to pre-defined values
-        void setToBlack();
-        void setToRed();
-        void setToGreen();
-        void setToBlue();
-        void setToWhite();
-        // Sets the color of object to the integer values provided in the input
+public:
+  // Initializes the object to white colour
+  ColorClass();
 
-        // Given a userOption 1-5 assigns it to a particular color depending on 
-        // the value
-        void setToUserOption(int userOption);
+  // Initializes the object with the color values provided in the input
+  ColorClass(const int inRed, const int inGreen, const int inBlue);
 
-        // Returns true only if clipping occurs
-        bool setTo(const int inRed, const int inGreen, const int inBlue);
+  // Reads RGB values from a file and assigns it to itself, will return
+  // false in case of bad input or color out of range
+  bool readColorFromFile(ifstream &inFile, string &errorMessage);
 
-        // Sets the color values to that of the values of ColorClass object
-        // provided in the input. Returns true only if clipping occurs
-        bool setTo(const ColorClass &inColor);
+  // Following functions set the color to pre-defined values
+  void setToBlack();
+  void setToRed();
+  void setToGreen();
+  void setToBlue();
+  void setToWhite();
+  // Sets the color of object to the integer values provided in the input
 
-        // Compares rgb values to that of another ColorClass object
-        bool compareColor(const ColorClass &rhsColor) const;
+  // Given a userOption 1-5 assigns it to a particular color depending on
+  // the value
+  void setToUserOption(int userOption);
 
-        // Prints the RGB values of the object on the output file
-        void printComponentValues(ofstream& outFile) const;
+  // Returns true only if clipping occurs
+  bool setTo(const int inRed, const int inGreen, const int inBlue);
+
+  // Sets the color values to that of the values of ColorClass object
+  // provided in the input. Returns true only if clipping occurs
+  bool setTo(const ColorClass &inColor);
+
+  // Compares rgb values to that of another ColorClass object
+  bool compareColor(const ColorClass &rhsColor) const;
+
+  // Prints the RGB values of the object on the output file
+  void printComponentValues(ofstream &outFile) const;
 };
 
 #endif

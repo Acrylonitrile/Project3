@@ -41,20 +41,20 @@ int main(int argc, char *argv[])
   string errorMessage = "";
 
   // Checking for input fileName 
-  if(argc < 2)
+  if(argc < MIN_ARGC)
   {
     cout << ERROR_NO_INPUT_IMAGE << endl;
-    exit(2);
+    exit(EXIT_CODE_INPUT_ERROR);
   }
  
-  string inputFileName = argv[1];
+  string inputFileName = argv[FILENAME_INDEX];
 
   // Checking for a valid .ppm extension in filename
   bool isValidFileName = checkPpmFileName(inputFileName, errorMessage);
   if(!isValidFileName)
   {
     cout << errorMessage << endl;
-    exit(3);
+    exit(EXIT_CODE_FILE_ERROR);
   }
 
   ifstream inFile;
@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
   {
     cout << ERROR_OPEN_IMAGE_FILE << inputFileName << endl;
     inFile.close();
-    exit(3);
+    exit(EXIT_CODE_FILE_ERROR);
   }
 
 
@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
   if(!isValidImage)
   {
     cout << errorMessage << endl;
-    exit(3);
+    exit(EXIT_CODE_FILE_ERROR);
   }
 
   inFile.close();
@@ -90,10 +90,12 @@ int main(int argc, char *argv[])
 
     // Check user choice range
     bool isChoiceValid = getSingleIntInput(userChoice);
-    if( !isChoiceValid || userChoice < 1 || userChoice > MAIN_MENU_LENGTH)
+    if(!isChoiceValid || 
+       userChoice < MIN_MENU_CHOICE || 
+       userChoice > MAIN_MENU_LENGTH)
     {
       cout << ERROR_INVALID_MENU << endl;
-      userChoice = 0;
+      userChoice = DEFAULT_USER_CHOICE;
     }
     else if(userChoice == WRITE_IMAGE_OPTION)
     {
