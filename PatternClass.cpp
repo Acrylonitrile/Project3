@@ -74,7 +74,7 @@ bool PatternClass::readPatternFromFile(string &inputFileName,
     if (!checkRange(width, MIN_DIMENSION_VALUE, MAX_DIMENSION_VALUE) ||
         !checkRange(height, MIN_DIMENSION_VALUE, MAX_DIMENSION_VALUE))
     {
-      errorMessage = ERROR_DIMENSIONS;
+      errorMessage = ERROR_DIMENSIONS_RANGE;
       inFile.close();
       return false;
     }
@@ -85,13 +85,13 @@ bool PatternClass::readPatternFromFile(string &inputFileName,
       {
         for (int colIndex = 0; colIndex < width; colIndex++)
         {
-          // Checking if the values are 0/1
+          // Checking if the values are 0/1 or missing
           if (!(inFile >> patternValues[rowIndex][colIndex]) ||
               !checkRange(patternValues[rowIndex][colIndex],
                           MIN_PATTERN_VALUE,
                           MAX_PATTERN_VALUE))
           {
-            errorMessage = ERROR_DATA;
+            errorMessage = ERROR_PATTERN_FILE_VALUES;
             inFile.close();
             return false;
           }
@@ -104,7 +104,7 @@ bool PatternClass::readPatternFromFile(string &inputFileName,
   if (inFile >> extraValue)
   {
     inFile.close();
-    errorMessage = ERROR_EXTRA_VALUES;
+    errorMessage = ERROR_EXTRA_VALUES_PATTERN;
     return false;
   }
   inFile.close();

@@ -31,12 +31,16 @@ const string ERROR_INVALID_MENU =
             "Invalid menu option!";
 const string ERROR_INVALID_PPM = 
             "Invalid .ppm file name!";
+const string ERROR_PATTERN_FILE_VALUES = 
+            "Error: Invalid or Insufficient pattern values provided in file";
 const string ERROR_INVALID_COLORS = 
-            "Invalid or insufficient color values provided";
+            "Error: Invalid or insufficient color values provided";
 const string ERROR_COLOR_OUT_OF_RANGE = 
-            "Color Value out of range";
-const string ERROR_EXTRA_VALUES = 
-            "Values provided exceed (width * height * 3)";
+            "Error: Color Value out of range";
+const string ERROR_EXTRA_VALUES_IMAGE = 
+            "Number of values provided exceed (width * height * 3)";
+const string ERROR_EXTRA_VALUES_PATTERN = 
+            "Number of values provided exceed (width * height)";
 const string ERROR_INCORRECT_DIMENSIONS = 
             "Error: Incorrect dimensions provided";
 const string ERROR_INCORRECT_MAGIC_NUM = "Invalid magic number, expected " + 
@@ -45,8 +49,10 @@ const string ERROR_INCORRECT_MAX_COLOR =
             "Invalid maximum color value provided";
 const string ERROR_NO_HEADER = 
             "Error: No header provided";
-const string ERROR_DIMENSIONS = 
+const string ERROR_DIMENSIONS_RANGE = 
             "Error: Dimensions must be between 1 and 2000";
+const string ERROR_RECTANGLE_DIMENSIONS = 
+          "Error: Incorrect rectangle dimensions, heigth or width is negative";
 
 
 const string PROGRAM_END_MESSAGE = "Thank you for using this program";
@@ -61,16 +67,11 @@ const int EXIT_OPTION = 5;
 
 const string MAIN_MENU_OPTIONS[MAIN_MENU_LENGTH] = 
                               {
-                                to_string(RECTANGLE_OPTION) + 
-                                ". Annotate image with rectangle",
-                                to_string(INSERT_PATTERN_OPTION) +
-                                ". Annotate image with pattern from file",
-                                to_string(INSERT_IMAGE_OPTION) +
-                                ". Insert another image",
-                                to_string(WRITE_IMAGE_OPTION) +
-                                ". Write out current image",
-                                to_string(EXIT_OPTION) +
-                                ". Exit the program"
+                                "1. Annotate image with rectangle",
+                                "2. Annotate image with pattern from file",
+                                "3. Insert another image",
+                                "4. Write out current image",
+                                "5. Exit the program"
                               };
 
 
@@ -85,14 +86,11 @@ const int RECTANGLE_DIMENSIONS_OPTION = 2;
 const int RECTANGLE_CENTRE_OPTION = 3;
 
 const string RECTANGLE_MENU_OPTIONS[NUM_RECTANGLE_OPTIONS] =
-                  {
-                    to_string(RECTANGLE_CORNER_OPTION) +
-                    ". Specify upper left and lower right corners of rectangle",
-                    to_string(RECTANGLE_DIMENSIONS_OPTION) +
-                    ". Specify upper left corner and dimensions of rectangle" ,
-                    to_string(RECTANGLE_CENTRE_OPTION) +
-                    ". Specify extent from center of rectangle"
-                  };
+            {
+              "1. Specify upper left and lower right corners of rectangle",
+              "2. Specify upper left corner and dimensions of rectangle" ,
+              "3. Specify extent from center of rectangle"
+            };
 
 const string PROMPT_RECTANGLE_OPTION = 
              "Enter int for rectangle specification method: ";
@@ -126,8 +124,8 @@ const int FILL_NO = 1;
 
 const string RECTANGLE_FILL_OPTIONS[NUM_FILL_OPTIONS] = 
                         {
-                          to_string(FILL_NO) + ". No",
-                          to_string(FILL_YES) + ". Yes"
+                          "1. No",
+                          "2. Yes"
                         };
 
 
@@ -145,11 +143,11 @@ const int NUM_WHITE_OPTION = 5;
 
 const string COLOR_MENU_OPTIONS[COLOR_MENU_LENGTH] = 
                                {
-                                  to_string(NUM_RED_OPTION) + ". Red",
-                                  to_string(NUM_GREEN_OPTION) + ". Green",
-                                  to_string(NUM_BLUE_OPTION) + ". Blue",
-                                  to_string(NUM_BLACK_OPTION) + ". Black",
-                                  to_string(NUM_WHITE_OPTION) + ". White"
+                                  "1. Red",
+                                  "2. Green",
+                                  "3. Blue",
+                                  "4. Black",
+                                  "5. White"
                                };
 
 

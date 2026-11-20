@@ -91,6 +91,7 @@ void drawRectangleOnImage(ColorImageClass &inputImage)
     startRow = rowCenter - halfHeight;
     startCol = colCenter - halfWidth;
   }
+  // Check if calculated heightand width are valid
   if(height > 0 && width > 0)
   {
     // Makes the used choose the color which they want to use
@@ -108,7 +109,7 @@ void drawRectangleOnImage(ColorImageClass &inputImage)
                         (fillValue == FILL_NO || fillValue == FILL_YES);
       if(!isValidFillValue)
       {
-        cout << ERROR_DATA << endl;
+        cout << ERROR_INVALID_MENU << endl;
       }
     }
     bool isFilled = (fillValue == FILL_YES);
@@ -121,6 +122,6 @@ void drawRectangleOnImage(ColorImageClass &inputImage)
   }
   else
   {
-    cout << ERROR_DATA << endl;
+    cout << ERROR_RECTANGLE_DIMENSIONS << endl;
   }
 }

@@ -63,7 +63,7 @@ bool ColorImageClass::readPpmHeader(ifstream &inFile,
     return false;
   }
 
-  // checking for width and height within bounds
+  // checking for width and height valid and within bounds
   inFile >> numCols >> numRows;
   if (inFile.fail())
   {
@@ -73,7 +73,7 @@ bool ColorImageClass::readPpmHeader(ifstream &inFile,
   if (!checkRange(numCols, MIN_DIMENSION_VALUE, MAX_DIMENSION_VALUE) ||
       !checkRange(numRows, MIN_DIMENSION_VALUE, MAX_DIMENSION_VALUE))
   {
-    errorMessage = ERROR_DIMENSIONS;
+    errorMessage = ERROR_DIMENSIONS_RANGE;
     return false;
   }
   // Checking if the max color value in the header is 255
@@ -112,7 +112,7 @@ bool ColorImageClass::readImageFromFile(ifstream &inFile, string &errorMessage)
   string extraValue;
   if (inFile >> extraValue)
   {
-    errorMessage = ERROR_EXTRA_VALUES;
+    errorMessage = ERROR_EXTRA_VALUES_IMAGE;
     return false;
   }
   return true;
