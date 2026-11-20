@@ -5,6 +5,7 @@
 #include "ColorClass.h"
 #include "RowColumnClass.h"
 #include "PatternClass.h"
+#include "RectangleClass.h"
 #include <string>
 #include <fstream>
 
@@ -23,7 +24,10 @@ class ColorImageClass
 private:
   int height;
   int width;
+  int startRow;
+  int startCol;
   ColorClass **pixelColors;
+  ColorClass transparencyColor;
 
   // Checks if the location (rowIndex, colIndex) provided is within the
   // bounds of the image. Returns true only if the location is valid
@@ -35,6 +39,8 @@ private:
   // memor for image
   void initializeImage(const int numRows, const int numCols);
 
+  // clears all the dynamically allocated memory
+  void clearImage();
 public:
   // Default constructor initializes all to 0
   ColorImageClass();
@@ -42,9 +48,19 @@ public:
   // deletes allocated memory on destruction
   ~ColorImageClass();
 
-  // Reads RGB values from a ppm file (which is already verified for
-  // proper header). Returns false in case of bad values, or less or
-  // more values than expected
+  // getters for startRow and startCol
+  int getStartRow() const;
+  int getStartCol() const;
+
+  // returns the transparency color of the image
+  ColorClass getTransparencyColor() const;
+
+  // Prompts the user to enter the startRow, startCol, and choose the 
+  // transparency color for the image
+  void readImageAttributes();
+
+  // Reads RGB values from a ppm file. Returns false in case of bad values, or 
+  // less or more values than expected
   bool readImageFromFile(ifstream &inFile, string &errorMessage);
 
   // Sets the color at the location specified by the RowCOlumnClass object
@@ -60,17 +76,16 @@ public:
   // unaffected. Starting position is the upper left corner of the image
   // and can be negative. negative indexes are ignored and only the
   // overlaping regions are added
-  void insertImage(const ColorImageClass &inputImage,
-                   const int startRow, const int startCol,
-                   ColorClass &transparencyColor);
+  void insertImage(const ColorImageClass &inputImage);
 
   // Same as insertImage, but we insert a pattern instead
-  void insertPattern(const PatternClass &inputPattern,
-                     const int startRow, const int startCol);
+  void insertPattern(const PatternClass &inputPattern);
+
+  void insertRectangle(const RectangleClass &inputRectangle);
 
   // Prints the color values of all the pixels, one row in each line
   // as a .ppm file along with the proper headers.
-  bool printImage(string &outFileName, string &errorMessage) const;
+  void printImage(ofstream &outFile) const;
 };
 
 #endif

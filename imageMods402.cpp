@@ -6,12 +6,11 @@
 #include<string>
 #include"checkPpmFileName.h"
 #include"printMenuOptions.h"
-#include"drawRectangleOnImage.h"
-#include"insertImage.h"
-#include"printImage.h"
-#include"insertPattern.h"
+#include"getSingleString.h"
 #include"getSingleIntInput.h"
 #include"checkRange.h"
+#include"PatternClass.h"
+#include"RectangleClass.h"
 using namespace std;
 
 
@@ -97,21 +96,118 @@ int main(int argc, char *argv[])
       cout << ERROR_INVALID_MENU << endl;
       userChoice = DEFAULT_USER_CHOICE;
     }
+    //----------------------------- WRITE IMAGE---------------------------------
     else if(userChoice == WRITE_IMAGE_OPTION)
     {
-      printImage(inputImage, errorMessage);
+      bool isValidFile = false;
+      // Validating File name
+      while (!isValidFile)
+      {
+        string outFileName;
+        cout << PROMPT_OUTPUT_FILENAME;
+
+        if (!getSingleString(outFileName) ||
+            !checkPpmFileName(outFileName, errorMessage))
+        {
+          cout << ERROR_INVALID_PPM << endl;
+        }
+        else
+        {
+          ofstream outFile;
+          outFile.open(outFileName.c_str());
+          if (outFile.fail())
+          {
+            cout << ERROR_OPEN_IMAGE_FILE + outFileName << endl;
+          }
+          else
+          { 
+          isValidFile = true;
+          inputImage.printImage(outFile);
+          }
+        }
+      }
     }
+    //------------------------INSERT PATTERN------------------------------------
     else if(userChoice == INSERT_PATTERN_OPTION)
     {
-      insertPattern(inputImage,errorMessage);
+      string patternFileName;
+      cout << PROMPT_ENTER_PATTERN_FILE;
+      getSingleString(patternFileName);
+
+      PatternClass annotatePattern;
+      annotatePattern.readPatternAttributes();
+
+      ifstream inFile;
+      inFile.open(patternFileName.c_str());
+      if (inFile.fail())
+      {
+        cout << ERROR_OPEN_PATTERN_FILE + patternFileName << endl;
+        inFile.close();
+      }
+      else
+      {
+        if(!annotatePattern.readPatternFromFile(inFile, errorMessage))
+        {
+          cout << errorMessage << endl;
+        }
+        else
+        {
+          // Insert in successful validation
+          inputImage.insertPattern(annotatePattern);
+        }
+      }
     }
+    //----------------------------- INSERT RECTANGLE ---------------------------
     else if(userChoice == RECTANGLE_OPTION)
     {
-      drawRectangleOnImage(inputImage);
+      RectangleClass rectangle;
+      if(rectangle.readRectanglefromInput(errorMessage))
+      {
+        inputImage.insertRectangle(rectangle);
+      }
+      else
+      {
+        cout << errorMessage << endl;
+      }
     }
+    //----------------------------- INSERT IMAGE -------------------------------
     else if(userChoice == INSERT_IMAGE_OPTION)
     {
-      insertImage(inputImage, errorMessage);
+      string annotateFileName;
+      cout << PROMPT_INSERT_IMAGE_NAME;
+      getSingleString(annotateFileName);
+      ifstream inFile;
+
+      bool isValidFileName = checkPpmFileName(annotateFileName, errorMessage);
+      if (!isValidFileName)
+      {
+        cout << errorMessage << endl;
+      }
+      else
+      {
+        // .ppm extension has been verified
+        ColorImageClass annotateImage;
+        annotateImage.readImageAttributes();
+
+        inFile.open(annotateFileName.c_str());
+        // handling bad filename
+        if (inFile.fail())
+        {
+          cout << ERROR_OPEN_IMAGE_FILE << annotateFileName << endl;
+        }
+        else
+        {
+          // read image and verifies that it has the proper values
+          if (!annotateImage.readImageFromFile(inFile, errorMessage))
+          {
+            cout << errorMessage << endl;
+          }
+          else
+          {
+            inputImage.insertImage(annotateImage);
+          }
+        }
+      }
     }
     else if(userChoice != EXIT_OPTION)
     {

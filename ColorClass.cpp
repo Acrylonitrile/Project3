@@ -2,6 +2,8 @@
 #include "clipValue.h"
 #include "constants.h"
 #include "checkRange.h"
+#include "printMenuOptions.h"
+#include "getSingleIntInput.h"
 #include <iostream>
 #include <fstream>
 
@@ -124,13 +126,6 @@ void ColorClass::setToWhite()
   setTo(MAX_COLOR_VALUE, MAX_COLOR_VALUE, MAX_COLOR_VALUE);
 }
 
-void ColorClass::printComponentValues(ofstream &outFile) const
-{
-  outFile << redValue
-          << " " << greenValue
-          << " " << blueValue;
-}
-
 void ColorClass::setToUserOption(int userOption)
 {
   if (userOption == NUM_RED_OPTION)
@@ -154,3 +149,35 @@ void ColorClass::setToUserOption(int userOption)
     setToWhite();
   }
 }
+
+
+void ColorClass::chooseColorFromMenu(string promptMessage)
+{
+  int colorChoice;
+  bool isValidColorChoice = false;
+  while(!isValidColorChoice)
+  {
+    printMenuOptions(COLOR_MENU_LENGTH, COLOR_MENU_OPTIONS);
+    cout << promptMessage;
+
+    // checking for bad input or input out of desired range
+    if(!getSingleIntInput(colorChoice) || 
+       !checkRange(colorChoice,MIN_MENU_CHOICE,COLOR_MENU_LENGTH))
+    {
+      cout << ERROR_INVALID_MENU << endl;
+    }
+    else
+    {
+      isValidColorChoice = true;
+    }
+  }
+  setToUserOption(colorChoice);
+}
+
+void ColorClass::printComponentValues(ofstream &outFile) const
+{
+  outFile << redValue
+          << " " << greenValue
+          << " " << blueValue;
+}
+

@@ -3,6 +3,10 @@
 #include "RowColumnClass.h"
 #include "checkRange.h"
 #include "constants.h"
+#include "validateSingleInt.h"
+#include "validateTwoInts.h"
+#include "getSingleString.h"
+#include "printMenuOptions.h"
 #include <fstream>
 #include <string>
 #include <iostream>
@@ -16,7 +20,8 @@ using namespace std;
 // Encodes information on a given pattern, using height, widths, values 1/0
 // and the color the user would like to draw the pattern in
 
-PatternClass::PatternClass() : height(0), width(0), patternValues(0)
+PatternClass::PatternClass() : height(0), width(0), startRow(0), 
+                               startCol(0), patternValues(0)
 { ; }
 
 PatternClass::PatternClass(const int inHeight, const int inWidth):
@@ -27,6 +32,7 @@ PatternClass::PatternClass(const int inHeight, const int inWidth):
 
 void PatternClass::initializePattern(const int inHeight, const int inWidth)
 {
+  clearPattern();
   height = inHeight;
   width = inWidth;
   patternValues = new int *[height];
@@ -37,6 +43,11 @@ void PatternClass::initializePattern(const int inHeight, const int inWidth)
 }
 
 PatternClass::~PatternClass()
+{
+  clearPattern();
+}
+
+void PatternClass::clearPattern()
 {
   if (patternValues != 0)
   {
@@ -49,56 +60,68 @@ PatternClass::~PatternClass()
   patternValues = 0;
 }
 
-bool PatternClass::readPatternFromFile(string &inputFileName,
+int PatternClass::getStartRow() const
+{
+  return startRow;
+}
+
+int PatternClass::getStartCol() const
+{
+  return startCol;
+}
+
+void PatternClass::readPatternAttributes()
+{
+  // reading and validating position input
+  validateTwoInts(startRow, startCol,
+                  PROMPT_ENTER_PATTERN_POSITION,
+                  ERROR_DATA);
+
+  // choosing color from menu
+  patternColor.chooseColorFromMenu(PROMPT_PATTERN_COLOR);
+}
+
+bool PatternClass::readPatternFromFile(ifstream &inFile,
                                        string &errorMessage)
 {
-  ifstream inFile;
-  inFile.open(inputFileName.c_str());
+  inFile >> width >> height;
+
+  // Validating width and height
   if (inFile.fail())
   {
-    errorMessage = ERROR_OPEN_PATTERN_FILE + inputFileName;
+    errorMessage = ERROR_INCORRECT_DIMENSIONS;
     inFile.close();
     return false;
   }
+  if (!checkRange(width, MIN_DIMENSION_VALUE, MAX_DIMENSION_VALUE) ||
+      !checkRange(height, MIN_DIMENSION_VALUE, MAX_DIMENSION_VALUE))
+  {
+    errorMessage = ERROR_DIMENSIONS_RANGE;
+    inFile.close();
+    return false;
+  }
+  //validation successful
   else
   {
-    inFile >> width >> height;
-
-    // Validating width and height
-    if (inFile.fail())
+    initializePattern(height, width);
+    for (int rowIndex = 0; rowIndex < height; rowIndex++)
     {
-      errorMessage = ERROR_INCORRECT_DIMENSIONS;
-      inFile.close();
-      return false;
-    }
-    if (!checkRange(width, MIN_DIMENSION_VALUE, MAX_DIMENSION_VALUE) ||
-        !checkRange(height, MIN_DIMENSION_VALUE, MAX_DIMENSION_VALUE))
-    {
-      errorMessage = ERROR_DIMENSIONS_RANGE;
-      inFile.close();
-      return false;
-    }
-    else
-    {
-      initializePattern(height, width);
-      for (int rowIndex = 0; rowIndex < height; rowIndex++)
+      for (int colIndex = 0; colIndex < width; colIndex++)
       {
-        for (int colIndex = 0; colIndex < width; colIndex++)
+        // Checking if the values are 0/1 or missing
+        if (!(inFile >> patternValues[rowIndex][colIndex]) ||
+            !checkRange(patternValues[rowIndex][colIndex],
+                        MIN_PATTERN_VALUE,
+                        MAX_PATTERN_VALUE))
         {
-          // Checking if the values are 0/1 or missing
-          if (!(inFile >> patternValues[rowIndex][colIndex]) ||
-              !checkRange(patternValues[rowIndex][colIndex],
-                          MIN_PATTERN_VALUE,
-                          MAX_PATTERN_VALUE))
-          {
-            errorMessage = ERROR_PATTERN_FILE_VALUES;
-            inFile.close();
-            return false;
-          }
+          errorMessage = ERROR_PATTERN_FILE_VALUES;
+          inFile.close();
+          return false;
         }
       }
     }
   }
+  
   // Checking if there are more values than necessary
   string extraValue;
   if (inFile >> extraValue)
@@ -150,26 +173,3 @@ void PatternClass::setPatternColor(const ColorClass &inColor)
   patternColor = inColor;
 }
 
-void PatternClass::setToRectangle(const bool isFilled, 
-                                  const ColorClass &inColor)
-{
-  setPatternColor(inColor);
-  for (int rowIndex = 0; rowIndex < height; rowIndex++)
-  {
-    for (int colIndex = 0; colIndex < width; colIndex++)
-    {
-      // if filled, then the entire pattern is just 1's,
-      // Otherwise only the border, forming a rectangle.
-      if (isFilled ||
-          rowIndex == 0 || rowIndex == height - 1 ||
-          colIndex == 0 || colIndex == width - 1)
-      {
-        patternValues[rowIndex][colIndex] = 1;
-      }
-      else
-      {
-        patternValues[rowIndex][colIndex] = 0;
-      }
-    }
-  }
-}

@@ -58,6 +58,10 @@ public:
   // Compares rgb values to that of another ColorClass object
   bool compareColor(const ColorClass &rhsColor) const;
 
+  // Provides a color menu for the user to choose from and validates
+  // the output and sets the chosen color as the color of this object
+  void chooseColorFromMenu(string promptMessage);
+
   // Prints the RGB values of the object on the output file
   void printComponentValues(ofstream &outFile) const;
 };

@@ -1,25 +1,78 @@
-#include"drawRectangleOnImage.h"
-#include"ColorImageClass.h"
-#include"printMenuOptions.h"
-#include"getSingleIntInput.h"
-#include"chooseColorFromMenu.h"
+#include"RectangleClass.h"
+#include"ColorClass.h"
 #include"constants.h"
 #include"validateSingleInt.h"
 #include"validateTwoInts.h"
+#include"getSingleIntInput.h"
+#include"printMenuOptions.h"
+#include"RowColumnClass.h"
 #include"checkRange.h"
+#include<string>
 #include<iostream>
 
 using namespace std;
 
+
 // Programmer: Anhad Bhati
 // Date: November 10, 2026
 //
-// Purpose: 
-// Helper function called after use chooses to draw a rectangle,
-// extracts relevant input from the user, validates the input and 
-// performs the anotation
+// Purpose:
+// Encodes information on a given rectangle, including starting row, column, 
+// height, width, filled or not filled, color. 
 
-void drawRectangleOnImage(ColorImageClass &inputImage)
+RectangleClass::RectangleClass(): height(0), width(0), startRow(0), startCol(0),
+                                  isFilled(false)
+{
+  ColorClass whiteColor;
+  rectangleColor = whiteColor;
+}
+
+int RectangleClass::getStartRow() const
+{
+  return startRow;
+}
+
+int RectangleClass::getStartCol() const
+{
+  return startCol;
+}
+
+bool RectangleClass::getIsFilled() const
+{
+  return isFilled;
+}
+
+ColorClass RectangleClass::getRectangleColor() const
+{
+  return rectangleColor;
+}
+
+bool RectangleClass::getValueAtLocation(const RowColumnClass &inRowCOl) const
+{
+  int rowIndex = inRowCOl.getRow();
+  int colIndex = inRowCOl.getCol();
+
+  bool isInRange = checkRange(rowIndex, IMG_MIN_ROW_INDEX,
+                              IMG_MIN_ROW_INDEX + height - 1) &&
+                   checkRange(colIndex, IMG_MIN_COL_INDEX,
+                              IMG_MIN_COL_INDEX + width - 1);
+
+  // should be in range and on the boundary or else within the boundary
+  // and filled to have color
+  if(isInRange && 
+    (isFilled || 
+    rowIndex == 0 || rowIndex == height - 1 ||
+    colIndex == 0 || colIndex == width - 1))
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+bool RectangleClass::readRectanglefromInput(string &errorMessage)
 {
   int inputOption;
   // variable to keep track of whether all the inputs are satisfactory
@@ -43,13 +96,6 @@ void drawRectangleOnImage(ColorImageClass &inputImage)
       isValidOption = true;
     }
   }
-
-  // There are the 4 fundamental quantitites calculated in different ways
-  // depending on what quantities the user provides
-  int height = 0, width = 0, startRow, startCol;
-
-
-  // When user speifies the opposite corners
   if(inputOption == RECTANGLE_CORNER_OPTION)
   {
     int upLeftRow, upLeftCol, lowRightRow, lowRightCol;
@@ -95,8 +141,8 @@ void drawRectangleOnImage(ColorImageClass &inputImage)
   if(height > 0 && width > 0)
   {
     // Makes the used choose the color which they want to use
-    ColorClass rectangleColor;
-    chooseColorFromMenu(rectangleColor, PROMPT_RECTANGLE_COLOR);
+    
+    rectangleColor.chooseColorFromMenu(PROMPT_RECTANGLE_COLOR);
 
     // Makes the user choose the fill options, and checks for bad input
     bool isValidFillValue = false;
@@ -112,16 +158,13 @@ void drawRectangleOnImage(ColorImageClass &inputImage)
         cout << ERROR_INVALID_MENU << endl;
       }
     }
-    bool isFilled = (fillValue == FILL_YES);
-    
-    // Finally performs insertion after validation is completed
-    PatternClass rectangle(height,width);
-    rectangle.setToRectangle(isFilled, rectangleColor);
-    
-    inputImage.insertPattern(rectangle, startRow, startCol);
+    isFilled = (fillValue == FILL_YES);
+
+    return true;
   }
   else
   {
-    cout << ERROR_RECTANGLE_DIMENSIONS << endl;
+    errorMessage = ERROR_RECTANGLE_DIMENSIONS;
+    return false;
   }
 }

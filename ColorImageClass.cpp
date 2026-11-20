@@ -5,6 +5,8 @@
 #include "PatternClass.h"
 #include "checkPpmFileName.h"
 #include "checkRange.h"
+#include "validateTwoInts.h"
+#include "RectangleClass.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -18,11 +20,14 @@ using namespace std;
 // This class represents an image, with each pixel represented by colorclass
 // object
 
-ColorImageClass::ColorImageClass() : height(0), width(0), pixelColors(0)
+ColorImageClass::ColorImageClass() : height(0), width(0), startRow(0), 
+                                     startCol(0), pixelColors(0)
+                                     
 { ; }
 
 void ColorImageClass::initializeImage(const int height, const int width)
 {
+  clearImage();
   pixelColors = new ColorClass *[height];
   for (int rowIndex = 0; rowIndex < height; rowIndex++)
   {
@@ -31,6 +36,11 @@ void ColorImageClass::initializeImage(const int height, const int width)
 }
 
 ColorImageClass::~ColorImageClass()
+{
+  clearImage();
+}
+
+void ColorImageClass::clearImage()
 {
   if (pixelColors != 0)
   {
@@ -41,6 +51,31 @@ ColorImageClass::~ColorImageClass()
     delete[] pixelColors;
   }
   pixelColors = 0;
+}
+
+int ColorImageClass::getStartRow() const
+{
+  return startRow;
+}
+
+int ColorImageClass::getStartCol() const
+{
+  return startCol;
+}
+
+ColorClass ColorImageClass::getTransparencyColor() const
+{
+  return transparencyColor;
+}
+
+void ColorImageClass::readImageAttributes()
+{
+  validateTwoInts(startRow, startCol,
+                  PROMPT_INSERT_IMAGE_POSITION,
+                  ERROR_DATA);
+
+  // Choosing transparency color
+  transparencyColor.chooseColorFromMenu(PROMPT_TRANSPARENCY_COLOR);
 }
 
 bool ColorImageClass::readPpmHeader(ifstream &inFile, 
@@ -160,9 +195,7 @@ bool ColorImageClass::getColorAtLocation(const RowColumnClass &inRowCol,
   return isLocationValid;
 }
 
-void ColorImageClass::insertImage(const ColorImageClass &inputImage,
-                                  const int startRow, const int startCol,
-                                  ColorClass &transparencyColor)
+void ColorImageClass::insertImage(const ColorImageClass &inputImage)
 {
   for (int rowIndex = 0; rowIndex < height; rowIndex++)
   {
@@ -172,15 +205,16 @@ void ColorImageClass::insertImage(const ColorImageClass &inputImage,
       // coordinates with starting row and column and check if it is a valid 
       // location
       ColorClass inputColor;
-      RowColumnClass locationIndex(rowIndex - startRow,
-                                   colIndex - startCol);
+      RowColumnClass locationIndex(rowIndex - inputImage.getStartRow(),
+                                   colIndex - inputImage.getStartCol());
       bool isLocationValid = inputImage.getColorAtLocation(
                                         locationIndex,
                                         inputColor
                                         );
       // pixel overwritten with input image only if it is a valid location
       // and does not have the transparency color
-      if (isLocationValid && !inputColor.compareColor(transparencyColor))
+      if (isLocationValid && 
+          !inputColor.compareColor(inputImage.getTransparencyColor()))
       {
         pixelColors[rowIndex][colIndex].setTo(inputColor);
       }
@@ -188,8 +222,7 @@ void ColorImageClass::insertImage(const ColorImageClass &inputImage,
   }
 }
 
-void ColorImageClass::insertPattern(const PatternClass &inputPattern,
-                                    const int startRow, const int startCol)
+void ColorImageClass::insertPattern(const PatternClass &inputPattern)
 {
   ColorClass patternColor = inputPattern.getPatternColor();
   for (int rowIndex = 0; rowIndex < height; rowIndex++)
@@ -199,8 +232,8 @@ void ColorImageClass::insertPattern(const PatternClass &inputPattern,
       // Since starting locations can be negative, we take the difference of 
       // coordinates with starting row and column and check if it is a valid 
       // location
-      RowColumnClass locationIndex(rowIndex - startRow,
-                                   colIndex - startCol);
+      RowColumnClass locationIndex(rowIndex - inputPattern.getStartRow(),
+                                   colIndex - inputPattern.getStartCol());
       int patternValue;
       bool isLocationValid = inputPattern.getValueAtLocation(
                                           locationIndex,
@@ -215,38 +248,48 @@ void ColorImageClass::insertPattern(const PatternClass &inputPattern,
   }
 }
 
-bool ColorImageClass::printImage(string &outFileName,
-                                 string &errorMessage) const
+void ColorImageClass::insertRectangle(const RectangleClass &inputRectangle)
 {
-
-  ofstream outFile;
-  outFile.open(outFileName.c_str());
-  if (outFile.fail())
+  ColorClass rectangleColor = inputRectangle.getRectangleColor();
+  for (int rowIndex = 0; rowIndex < height; rowIndex++)
   {
-    errorMessage = ERROR_OPEN_IMAGE_FILE + outFileName;
-    return false;
-  }
-  else
-  {
-    outFile << PPM_IDENTIFIER_STRING << endl;
-    outFile << width << " " << height << endl;
-    outFile << MAX_COLOR_VALUE << endl;
-    for (int rowIndex = 0; rowIndex < height; rowIndex++)
+    for (int colIndex = 0; colIndex < width; colIndex++)
     {
-      for (int colIndex = 0; colIndex < width; colIndex++)
-      {
+      // Since starting locations can be negative, we take the difference of 
+      // coordinates with starting row and column and check if it is a valid 
+      // location
+      RowColumnClass locationIndex(rowIndex - inputRectangle.getStartRow(),
+                                   colIndex - inputRectangle.getStartCol());
 
-        pixelColors[rowIndex][colIndex].printComponentValues(outFile);
-        if (colIndex == width - 1)
-        {
-          outFile << endl;
-        }
-        else
-        {
-          outFile << " ";
-        }
+      bool isLocationValid = inputRectangle.getValueAtLocation(locationIndex);
+      // pixel overwritten only on valid location and having a value of 1
+      if (isLocationValid)
+      {
+        pixelColors[rowIndex][colIndex] = rectangleColor;
       }
     }
   }
-  return true;
+}
+
+void ColorImageClass::printImage(ofstream &outFile) const
+{
+  outFile << PPM_IDENTIFIER_STRING << endl;
+  outFile << width << " " << height << endl;
+  outFile << MAX_COLOR_VALUE << endl;
+  for (int rowIndex = 0; rowIndex < height; rowIndex++)
+  {
+    for (int colIndex = 0; colIndex < width; colIndex++)
+    {
+
+      pixelColors[rowIndex][colIndex].printComponentValues(outFile);
+      if (colIndex == width - 1)
+      {
+        outFile << endl;
+      }
+      else
+      {
+        outFile << " ";
+      }
+    }
+  }
 }
