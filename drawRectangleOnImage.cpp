@@ -6,6 +6,7 @@
 #include"constants.h"
 #include"validateSingleInt.h"
 #include"validateTwoInts.h"
+#include"checkRange.h"
 #include<iostream>
 
 using namespace std;
@@ -33,8 +34,7 @@ void drawRectangleOnImage(ColorImageClass &inputImage)
     
     // Error in case of out of bounds input of failed stream
     if(!isOptionValid || 
-       inputOption < MIN_MENU_CHOICE || 
-       inputOption > NUM_RECTANGLE_OPTIONS)
+       !checkRange(inputOption, MIN_MENU_CHOICE, NUM_RECTANGLE_OPTIONS))
     {
       cout << ERROR_INVALID_MENU << endl;
     }
@@ -114,10 +114,8 @@ void drawRectangleOnImage(ColorImageClass &inputImage)
     bool isFilled = (fillValue == FILL_YES);
     
     // Finally performs insertion after validation is completed
-    PatternClass rectangle;
-    rectangle.initializePattern(height,width);
-    rectangle.setToRectangle(isFilled);
-    rectangle.setPatternColor(rectangleColor);
+    PatternClass rectangle(height,width);
+    rectangle.setToRectangle(isFilled, rectangleColor);
     
     inputImage.insertPattern(rectangle, startRow, startCol);
   }

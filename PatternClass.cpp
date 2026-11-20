@@ -19,6 +19,12 @@ using namespace std;
 PatternClass::PatternClass() : height(0), width(0), patternValues(0)
 { ; }
 
+PatternClass::PatternClass(const int inHeight, const int inWidth):
+                           height(inHeight), width(inWidth)
+{
+  initializePattern(inHeight,inWidth);
+}
+
 void PatternClass::initializePattern(const int inHeight, const int inWidth)
 {
   height = inHeight;
@@ -139,13 +145,15 @@ void PatternClass::setPatternValue(const int inValue,
   patternValues[rowIndex][colIndex] = inValue;
 }
 
-void PatternClass::setPatternColor(ColorClass &inColor)
+void PatternClass::setPatternColor(const ColorClass &inColor)
 {
   patternColor = inColor;
 }
 
-void PatternClass::setToRectangle(const bool isFilled)
+void PatternClass::setToRectangle(const bool isFilled, 
+                                  const ColorClass &inColor)
 {
+  setPatternColor(inColor);
   for (int rowIndex = 0; rowIndex < height; rowIndex++)
   {
     for (int colIndex = 0; colIndex < width; colIndex++)

@@ -3,8 +3,8 @@
 #include "ColorClass.h"
 #include "RowColumnClass.h"
 #include "PatternClass.h"
-#include "readPpmHeader.h"
 #include "checkPpmFileName.h"
+#include "checkRange.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -45,8 +45,52 @@ ColorImageClass::~ColorImageClass()
   pixelColors = 0;
 }
 
+bool ColorImageClass::readPpmHeader(ifstream &inFile, 
+                                    int &numRows, int &numCols, 
+                                    string &errorMessage)
+{
+  string magicNumber;
+  int maxColorValue;
+
+  inFile >> magicNumber;
+  // Checking for no or incorrect magic number
+  if (inFile.fail())
+  {
+    errorMessage = ERROR_NO_HEADER;
+    return false;
+  }
+  if (magicNumber != PPM_IDENTIFIER_STRING)
+  {
+    errorMessage = ERROR_INCORRECT_MAGIC_NUM + magicNumber;
+    return false;
+  }
+
+  // checking for width and height within bounds
+  inFile >> numCols >> numRows;
+  if (inFile.fail())
+  {
+    errorMessage = ERROR_INCORRECT_DIMENSIONS;
+    return false;
+  }
+  if (!checkRange(numCols, MIN_DIMENSION_VALUE, MAX_DIMENSION_VALUE) ||
+      !checkRange(numRows, MIN_DIMENSION_VALUE, MAX_DIMENSION_VALUE))
+  {
+    errorMessage = ERROR_DIMENSIONS;
+    return false;
+  }
+  // Checking if the max color value in the header is 255
+  inFile >> maxColorValue;
+  if (inFile.fail() || maxColorValue != MAX_COLOR_VALUE)
+  {
+    errorMessage = ERROR_INCORRECT_MAX_COLOR;
+    return false;
+  }
+  return true;
+}
+
 bool ColorImageClass::readImageFromFile(ifstream &inFile, string &errorMessage)
 {
+  // Verify ppm header
   bool isHeaderValid = readPpmHeader(inFile, height, width, errorMessage);
 
   if (!isHeaderValid)
@@ -79,10 +123,8 @@ bool ColorImageClass::readImageFromFile(ifstream &inFile, string &errorMessage)
 bool ColorImageClass::validateLocation(const int rowIndex,
                                        const int colIndex) const
 {
-  if (rowIndex < IMG_MIN_ROW_INDEX ||
-      rowIndex > IMG_MIN_ROW_INDEX + height - 1 ||
-      colIndex < IMG_MIN_COL_INDEX ||
-      colIndex > IMG_MIN_COL_INDEX + width - 1)
+  if (!checkRange(rowIndex,IMG_MIN_ROW_INDEX, IMG_MIN_ROW_INDEX + height -1) ||
+      !checkRange(colIndex, IMG_MIN_COL_INDEX, IMG_MIN_COL_INDEX + width -1))
   {
     return false;
   }

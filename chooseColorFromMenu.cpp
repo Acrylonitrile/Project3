@@ -1,5 +1,6 @@
 #include"constants.h"
 #include"ColorClass.h"
+#include"checkRange.h"
 #include<iostream>
 #include<string>
 #include"printMenuOptions.h"
@@ -27,8 +28,7 @@ void chooseColorFromMenu(ColorClass &inputColor, string promptMessage)
 
     // checking for bad input or input out of desired range
     if(!getSingleIntInput(colorChoice) || 
-        colorChoice < MIN_MENU_CHOICE || 
-        colorChoice > COLOR_MENU_LENGTH)
+       !checkRange(colorChoice,MIN_MENU_CHOICE,COLOR_MENU_LENGTH))
     {
       cout << ERROR_INVALID_MENU << endl;
     }

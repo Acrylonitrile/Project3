@@ -20,14 +20,16 @@ private:
   int height, width;
   int **patternValues;
   ColorClass patternColor;
+  // Take height and width and Dynamically allocates memory to hold
+  // hold pattern values
+  void initializePattern(const int height, const int width);
 
 public:
   // Initializes height, width and patternValues to 0
   PatternClass();
 
-  // Take height and width and Dynamically allocates memory to hold
-  // hold pattern values
-  void initializePattern(const int height, const int width);
+  // Initializes to input height and width
+  PatternClass(const int inHeight, const int inWidth);
 
   // Deletes teh allocated memory on destruction
   ~PatternClass();
@@ -49,11 +51,12 @@ public:
                        const int colIndex);
 
   // Sets patternColor to the given color
-  void setPatternColor(ColorClass &inColor);
+  void setPatternColor(const ColorClass &inColor);
 
   // Used for drawing rectangles. Turns the pattern into a
   // Hollow or filled rectangle
-  void setToRectangle(bool isFilled);
+  void setToRectangle(const bool isFilled,
+                      const ColorClass &inColor);
 };
 
 #endif

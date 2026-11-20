@@ -11,6 +11,7 @@
 #include"printImage.h"
 #include"insertPattern.h"
 #include"getSingleIntInput.h"
+#include"checkRange.h"
 using namespace std;
 
 
@@ -91,8 +92,7 @@ int main(int argc, char *argv[])
     // Check user choice range
     bool isChoiceValid = getSingleIntInput(userChoice);
     if(!isChoiceValid || 
-       userChoice < MIN_MENU_CHOICE || 
-       userChoice > MAIN_MENU_LENGTH)
+       !checkRange(userChoice, MIN_MENU_CHOICE, MAIN_MENU_LENGTH))
     {
       cout << ERROR_INVALID_MENU << endl;
       userChoice = DEFAULT_USER_CHOICE;

@@ -20,7 +20,7 @@ const string PPM_IDENTIFIER_STRING = "P3";
 const string ERROR_NO_INPUT_IMAGE = 
             "Error: No Input Image provided";
 const string ERROR_EOF = 
-            "Error: End of file reached";
+            "\nError: End of file reached";
 const string ERROR_DATA = 
             "Invalid data entered";
 const string ERROR_OPEN_PATTERN_FILE = 
@@ -52,6 +52,7 @@ const string ERROR_DIMENSIONS =
 const string PROGRAM_END_MESSAGE = "Thank you for using this program";
 
 const int MAIN_MENU_LENGTH = 5;
+
 
 const string MAIN_MENU_OPTIONS[MAIN_MENU_LENGTH] = 
                               {

@@ -9,6 +9,7 @@ using namespace std;
 //
 // Purpose:
 // Keeps prompting the used to provide 2 inputs until they are valid
+// Used for instances of the menu where re-prompting is needed.
 
 void validateTwoInts(int &input1, int &input2, const string &inputPrompt,  
                      const string &errorMessage);

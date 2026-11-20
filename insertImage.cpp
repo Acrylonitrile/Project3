@@ -38,45 +38,40 @@ void insertImage(ColorImageClass &inputImage, string &errorMessage)
   else
   {
     // .ppm extensino has been verified
-    bool isInputValid = false;
 
-    while (!isInputValid)
+
+    int startRow, startCol;
+    // starting row and column input
+    validateTwoInts(startRow, startCol,
+                    PROMPT_ENTER_PATTERN_POSITION,
+                    ERROR_DATA);
+
+    // Choosing transparency coor
+    ColorClass transparencyColor;
+    chooseColorFromMenu(transparencyColor, PROMPT_TRANSPARENCY_COLOR);
+
+    inFile.open(annotateFileName.c_str());
+    // handling bad filename
+    if (inFile.fail())
     {
-      int startRow, startCol;
-      // starting row and column input
-      validateTwoInts(startRow, startCol,
-                      PROMPT_ENTER_PATTERN_POSITION,
-                      ERROR_DATA);
+      cout << ERROR_OPEN_IMAGE_FILE << annotateFileName << endl;
+    }
+    else
+    {
 
-      // Choosing transparency coor
-      ColorClass transparencyColor;
-      chooseColorFromMenu(transparencyColor, PROMPT_TRANSPARENCY_COLOR);
-
-      isInputValid = true;
-      inFile.open(annotateFileName.c_str());
-      // handling bad filename
-      if (inFile.fail())
+      ColorImageClass annotateImage;
+      // reads image and verifies that it has the proper values
+      bool isValidImage = annotateImage.readImageFromFile(
+          inFile, errorMessage);
+      if (!isValidImage)
       {
-        cout << ERROR_OPEN_IMAGE_FILE << annotateFileName << endl;
+        cout << errorMessage << endl;
       }
       else
       {
-
-        ColorImageClass annotateImage;
-        // reads image and verifies that it has the proper values
-        bool isValidImage = annotateImage.readImageFromFile(
-                                          inFile, errorMessage
-                                          );
-        if (!isValidImage)
-        {
-          cout << errorMessage << endl;
-        }
-        else
-        {
-          inputImage.insertImage(annotateImage,
-                                 startRow, startCol,
-                                 transparencyColor);
-        }
+        inputImage.insertImage(annotateImage,
+                               startRow, startCol,
+                               transparencyColor);
       }
     }
   }

@@ -28,14 +28,16 @@ private:
   // Checks if the location (rowIndex, colIndex) provided is within the
   // bounds of the image. Returns true only if the location is valid
   bool validateLocation(const int rowIndex, const int colIndex) const;
+  // Reads the ppm heeader and verifies if it has the correct format
+  bool readPpmHeader(ifstream &inFile, int &numRows, int &numCols,
+                     string &errorMessage);
+  // Initializes to desired width and height and dynamucally allocates
+  // memor for image
+  void initializeImage(const int numRows, const int numCols);
 
 public:
   // Default constructor initializes all to 0
   ColorImageClass();
-
-  // Initializes to desired width and height and dynamucally allocates
-  // memor for image
-  void initializeImage(const int numRows, const int numCols);
 
   // deletes allocated memory on destruction
   ~ColorImageClass();
