@@ -21,7 +21,7 @@ bool getTwoIntInputs(int &input1, int &input2)
     if(cin.eof())
     {
         cout << "End of file reached" << endl;
-        exit(0);
+        exit(3);
     }
     cin.clear();
     cin.ignore(NUM_IGNORE, '\n');

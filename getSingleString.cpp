@@ -22,7 +22,7 @@ bool getSingleString(string &inputString)
     if(cin.eof())
     {
         cout << "End of file reached" << endl;
-        exit(0);
+        exit(3);
     }
     cin.clear();
     cin.ignore(NUM_IGNORE, '\n');
